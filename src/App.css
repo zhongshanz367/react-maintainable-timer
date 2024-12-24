@@ -1,0 +1,23 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 0;
+}
+
+.container {
+  margin-bottom: 50px;
+}
+
+.container h2 {
+  margin-bottom: 0;
+}
+
+.container button {
+  margin: 3px;
+}
