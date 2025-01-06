@@ -2,15 +2,16 @@ export const TimerEvent = {
   TimeStart: "TimeStart",
   TimeStop: "TimeStop",
   TimeReset: "TimeReset",
+  TimeUp: "TimeUp",
   TimeUpdated: "TimeUpdated",
 };
 
 class Timer {
-  elapsedTime: number = 0;
-  private element?: HTMLElement;
-  private intervalId: number | null = null;
-  private limitSeconds?: number;
-  private onTimeUp?: () => void;
+  private _elapsedTime: number = 0;
+  private _element?: HTMLElement;
+  private _intervalId: number | null = null;
+  private _limitSeconds?: number;
+  private _onTimeUp?: () => void;
 
   constructor(
     element?: HTMLElement,
@@ -20,12 +21,16 @@ class Timer {
       onTimeUp?: () => void;
     }
   ) {
-    this.element = element;
-    this.elapsedTime = options?.offsetSeconds || 0;
-    this.limitSeconds = options?.limitSeconds;
-    this.onTimeUp = options?.onTimeUp;
+    this._element = element;
+    this._elapsedTime = options?.offsetSeconds || 0;
+    this._limitSeconds = options?.limitSeconds;
+    this._onTimeUp = options?.onTimeUp;
 
     this.addEventListners();
+  }
+
+  get elapsedTime() {
+    return this._elapsedTime;
   }
 
   addEventListners() {
@@ -35,28 +40,31 @@ class Timer {
   }
 
   isRunning() {
-    return this.intervalId !== null;
+    return this._intervalId !== null;
   }
 
   start() {
-    if (this.intervalId !== null) {
+    if (this._intervalId !== null) {
       return;
     }
 
-    this.intervalId = setInterval(() => {
-      this.updateTime(this.elapsedTime + 1);
+    this._intervalId = setInterval(() => {
+      this.updateTime(this._elapsedTime + 1);
 
-      if (this.limitSeconds && this.elapsedTime >= this.limitSeconds) {
-        this.onTimeUp?.();
+      if (this._limitSeconds && this._elapsedTime >= this._limitSeconds) {
         this.stop();
+
+        window.dispatchEvent(new CustomEvent(TimerEvent.TimeUp));
+
+        this._onTimeUp?.();
       }
     }, 1000);
   }
 
   stop() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
+    if (this._intervalId) {
+      clearInterval(this._intervalId);
+      this._intervalId = null;
     }
   }
 
@@ -65,13 +73,13 @@ class Timer {
   }
 
   updateTime(time: number) {
-    this.elapsedTime = time;
+    this._elapsedTime = time;
 
-    if (this.element) {
-      this.element.textContent = String(this.elapsedTime);
+    if (this._element) {
+      this._element.textContent = String(this._elapsedTime);
     }
 
-    window.dispatchEvent(new CustomEvent(TimerEvent.TimeUpdated, { detail: this.elapsedTime }));
+    window.dispatchEvent(new CustomEvent(TimerEvent.TimeUpdated, { detail: this._elapsedTime }));
   }
 }
 
