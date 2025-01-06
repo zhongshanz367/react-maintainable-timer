@@ -1,5 +1,4 @@
 import "./App.css";
-import Container from "./components/Container";
 import { OutsideOfReactTimer } from "./features/outsideOfReactTimer/Timer";
 import { SimpleTimer } from "./features/simpleTimer/Timer";
 import { SubscribeTimer } from "./features/subscribeTimer/Timer";
@@ -12,32 +11,16 @@ function App() {
       <p>Please turn on “Highlight updates when components render” in React DevTools.</p>
       <div style={{ display: "flex" }}>
         <div>
-          <Container>
-            <SimpleTimer />
-          </Container>
-          <Container>
-            <OutsideOfReactTimer />
-          </Container>
-          <Container>
-            <SubscribeTimer />
-          </Container>
-          <Container>
-            <SyncExternalStoreTimer />
-          </Container>
+          <SimpleTimer />
+          <OutsideOfReactTimer />
+          <SubscribeTimer />
+          <SyncExternalStoreTimer />
         </div>
         <div style={{ marginLeft: "30px" }}>
-          <div className="container">
-            <SimpleTimer />
-          </div>
-          <div className="container">
-            <OutsideOfReactTimer />
-          </div>
-          <div className="container">
-            <SubscribeTimer />
-          </div>
-          <div className="container">
-            <SyncExternalStoreTimer />
-          </div>
+          <SimpleTimer />
+          <OutsideOfReactTimer />
+          <SubscribeTimer />
+          <SyncExternalStoreTimer />
         </div>
       </div>
     </div>
